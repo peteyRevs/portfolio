@@ -17,7 +17,7 @@ export default function About() {
           {/* Left - Text Content */}
           <div className="space-y-6">
             <p className="text-lg text-slate-700 leading-relaxed">
-              I&apos;m a passionate full-stack developer who loves turning complex problems
+              I'm a passionate full-stack developer who loves turning complex problems
               into elegant solutions. With a strong foundation in modern web technologies,
               I specialize in building scalable applications that users love.
             </p>
