@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-space-grotesk);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center px-8 py-3.5
+           overflow-hidden font-medium text-white
+           bg-gradient-to-r from-blue-500 to-indigo-600
+           rounded-lg
+           transition-all duration-500 ease-out
+           hover:from-blue-600 hover:to-indigo-700
+           hover:shadow-[0_0_30px_rgba(79,70,229,0.4)]
+           before:absolute before:inset-0
+           before:bg-gradient-to-r before:from-white/20 before:to-transparent
+           before:translate-x-[-100%] before:transition-transform before:duration-700
+           hover:before:translate-x-[100%];
+  }
+
+  .btn-secondary {
+    @apply relative inline-flex items-center justify-center px-8 py-3.5
+           font-medium text-blue-200
+           bg-transparent
+           rounded-lg
+           border border-blue-400/40
+           backdrop-blur-sm
+           transition-all duration-500 ease-out
+           hover:border-blue-400
+           hover:text-white
+           hover:shadow-[0_0_20px_rgba(96,165,250,0.3)]
+           before:absolute before:inset-0
+           before:bg-gradient-to-r before:from-blue-500/0 before:via-blue-500/10 before:to-blue-500/0
+           before:translate-x-[-100%] before:transition-transform before:duration-700
+           hover:before:translate-x-[100%]
+           after:absolute after:inset-0
+           after:rounded-lg after:border after:border-white/10
+           after:opacity-0 after:transition-opacity after:duration-500
+           hover:after:opacity-100;
+  }
+}
