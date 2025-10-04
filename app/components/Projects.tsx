@@ -172,21 +172,6 @@ export default function Projects() {
             </div>
           ))}
         </div>
-
-        {/* CTA */}
-        <div className="text-center mt-16">
-          <p className="text-slate-600 mb-6">
-            Want to see more? Check out my GitHub for additional projects.
-          </p>
-          <a
-            href="https://github.com/arcticpete"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary"
-          >
-            View GitHub Profile
-          </a>
-        </div>
       </div>
 
       <style jsx>{`

@@ -1,9 +1,10 @@
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
-import Skills from './components/Skills';
 import Projects from './components/Projects';
-import Awards from './components/Awards'
+import Contact from './components/Contact';
+import Services from './components/Services';
+import Awards from './components/Awards';
 
 export default function Home() {
   return (
@@ -11,9 +12,10 @@ export default function Home() {
       <Header />
       <Hero />
       <About />
-      <Skills />
+      <Services />
+      <Awards/>
       <Projects />
-      <Awards />
+      <Contact/>
     </>
   );
 }

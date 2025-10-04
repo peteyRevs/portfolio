@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -8,8 +9,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Peter Arevalo | Full Stack Developer",
-  description: "Portfolio of Peter Arevalo - Full Stack Developer & Creative Technologist",
+  title: "Cosmic Code Lab | Full-Stack Web Development",
+  description: "Cosmic Code Lab - Building cutting-edge web applications and e-commerce solutions. Founded by experienced developer Peter Arevalo.",
 };
 
 export default function RootLayout({
@@ -23,6 +24,7 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} font-sans antialiased`}
       >
         {children}
+        <SpeedInsights/>
       </body>
     </html>
   );

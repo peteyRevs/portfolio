@@ -27,6 +27,10 @@ html {
   scroll-behavior: smooth;
 }
 
+button {
+  @apply cursor-pointer
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -40,37 +44,28 @@ html {
 
 @layer components {
   .btn-primary {
-    @apply relative inline-flex items-center justify-center px-8 py-3.5
-           overflow-hidden font-medium text-white
+    @apply inline-flex items-center justify-center px-8 py-3.5
+           font-medium text-white
            bg-gradient-to-r from-blue-500 to-indigo-600
            rounded-lg
            transition-all duration-500 ease-out
-           hover:from-blue-600 hover:to-indigo-700
-           hover:shadow-[0_0_30px_rgba(79,70,229,0.4)]
-           before:absolute before:inset-0
-           before:bg-gradient-to-r before:from-white/20 before:to-transparent
-           before:translate-x-[-100%] before:transition-transform before:duration-700
-           hover:before:translate-x-[100%];
+           hover:from-blue-400 hover:to-indigo-500
+           hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]
+           hover:translate-y-[-2px];
   }
 
   .btn-secondary {
-    @apply relative inline-flex items-center justify-center px-8 py-3.5
+    @apply inline-flex items-center justify-center px-8 py-3.5
            font-medium text-blue-200
-           bg-transparent
+           bg-slate-900/30
            rounded-lg
-           border border-blue-400/40
+           border border-blue-400/30
            backdrop-blur-sm
            transition-all duration-500 ease-out
-           hover:border-blue-400
+           hover:border-blue-400/60
            hover:text-white
-           hover:shadow-[0_0_20px_rgba(96,165,250,0.3)]
-           before:absolute before:inset-0
-           before:bg-gradient-to-r before:from-blue-500/0 before:via-blue-500/10 before:to-blue-500/0
-           before:translate-x-[-100%] before:transition-transform before:duration-700
-           hover:before:translate-x-[100%]
-           after:absolute after:inset-0
-           after:rounded-lg after:border after:border-white/10
-           after:opacity-0 after:transition-opacity after:duration-500
-           hover:after:opacity-100;
+           hover:bg-slate-900/50
+           hover:shadow-[0_0_10px_rgba(96,165,250,0.15)]
+           hover:translate-y-[-2px];
   }
 }
