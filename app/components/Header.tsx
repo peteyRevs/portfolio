@@ -37,6 +37,8 @@ export default function Header() {
 
   const navLinks = [
     { href: '#mission', label: 'Mission' },
+    { href: '#services', label: 'Services' },
+    { href: '#reviews-awards', label: 'Reviews & Awards' },
     { href: '#projects', label: 'Projects' },
     { href: '#contact', label: 'Contact' },
   ];
@@ -132,11 +134,10 @@ export default function Header() {
                 </a>
               ))}
               <a
-                href="#contact"
-                onClick={(e) => handleNavClick(e, '#contact')}
+                href="/login"
                 className="btn-primary text-sm"
               >
-                Get in Touch
+                Client Login
               </a>
             </nav>
 
@@ -210,15 +211,14 @@ export default function Header() {
             </a>
           ))}
           <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, '#contact')}
+            href="/login"
             className="btn-primary text-lg mt-8"
             style={{
               animation: isMenuOpen ? `slideIn 0.5s ease-out ${navLinks.length * 0.1}s forwards` : 'none',
               opacity: 0,
             }}
           >
-            Get in Touch
+            Client Login
           </a>
         </nav>
       </div>

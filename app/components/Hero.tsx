@@ -15,7 +15,7 @@ export default function Hero() {
     <div className="relative min-h-screen overflow-hidden">
       <SpaceParticles />
 
-      <section className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
+      <section id="hero" className="fixed inset-0 z-10 flex flex-col items-center justify-center px-6 text-center">
         <div className="max-w-4xl space-y-8">
           {/* Rocket launches up from bottom */}
           <div

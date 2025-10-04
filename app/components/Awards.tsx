@@ -68,8 +68,12 @@ export default function Awards() {
   ];
 
   return (
-    <section id="reviews-awards" className="py-24 md:py-32">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="reviews-awards" className="py-24 md:py-32 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      {/* Background gradient orbs */}
+      <div className="absolute top-20 left-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl"></div>
+
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -84,7 +88,7 @@ export default function Awards() {
             {testimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
-                className="bg-slate-700/50 rounded-lg p-6 border border-slate-600"
+                className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl hover:bg-white/15 hover:border-white/30 transition-all duration-500"
               >
                 {/* Stars */}
                 <div className="flex gap-1 mb-4">
@@ -117,7 +121,7 @@ export default function Awards() {
             return (
               <div
                 key={award.id}
-                className="bg-slate-700/50 rounded-lg p-6 border border-slate-600"
+                className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl hover:bg-white/15 hover:border-white/30 transition-all duration-500"
               >
                 {/* Icon */}
                 <IconComponent className="w-12 h-12 text-blue-400 mb-4" />

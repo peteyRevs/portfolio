@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 interface Project {
   id: string;
@@ -9,58 +10,54 @@ interface Project {
   image: string;
   tags: string[];
   liveUrl?: string;
-  githubUrl?: string;
-  featured: boolean;
+  category: 'e-commerce' | 'web-app' | 'all';
 }
 
 export default function Projects() {
   const projects: Project[] = [
     {
       id: '1',
-      title: 'E-Commerce Platform',
-      description: 'A full-stack e-commerce solution built with Next.js, featuring real-time inventory management, payment processing, and advanced analytics.',
-      image: '/projects/ecommerce.jpg',
-      tags: ['Next.js', 'TypeScript', 'Stripe', 'PostgreSQL'],
-      liveUrl: 'https://example.com',
-      githubUrl: 'https://github.com',
-      featured: true,
+      title: 'Ecover International',
+      description: 'Contributed to a comprehensive e-commerce platform using TypeScript, Tailwind, BigCommerce, and Next.js. Integrated SearchSpring for search, Bazaar Voice for reviews, custom account pages with stored credit card features, and multi-country internationalization.',
+      image: '/projects/ecover.png',
+      tags: ['TypeScript', 'Next.js', 'BigCommerce', 'Tailwind', 'Vercel', 'SearchSpring', 'Bazaar Voice'],
+      liveUrl: 'https://www.ecover.com/en/int/',
+      category: 'e-commerce',
     },
     {
       id: '2',
-      title: 'SaaS Dashboard',
-      description: 'Modern analytics dashboard with real-time data visualization, user management, and comprehensive reporting tools.',
-      image: '/projects/dashboard.jpg',
-      tags: ['React', 'Node.js', 'MongoDB', 'Chart.js'],
-      liveUrl: 'https://example.com',
-      githubUrl: 'https://github.com',
-      featured: true,
+      title: 'Mrs. Meyer\'s Clean Day',
+      description: 'Developed interactive shopping experiences on BigCommerce Stencil theme using JavaScript and Foundation. Built custom site updates and subscription functionality using OrderGroove, with Firebase Cloud Functions for backend processing.',
+      image: '/projects/mrsmeyers.png',
+      tags: ['JavaScript', 'BigCommerce', 'Foundation', 'Firebase', 'OrderGroove'],
+      liveUrl: 'https://mrsmeyers.com/',
+      category: 'e-commerce',
     },
     {
       id: '3',
-      title: 'Social Media App',
-      description: 'Mobile-first social platform with real-time messaging, media sharing, and advanced privacy controls.',
-      image: '/projects/social.jpg',
-      tags: ['Next.js', 'Socket.io', 'Redis', 'AWS'],
-      liveUrl: 'https://example.com',
-      featured: true,
+      title: 'Uplift Desk',
+      description: 'Completely built this e-commerce site on BigCommerce Stencil theme using JavaScript and Foundation. Implemented custom CSS animations and developed a real-time desk builder that generates thousands of product variations dynamically.',
+      image: '/projects/upliftdesk.png',
+      tags: ['JavaScript', 'BigCommerce', 'Foundation', 'Firebase', 'CSS Animations', 'Product Builder'],
+      liveUrl: 'https://www.upliftdesk.com',
+      category: 'e-commerce',
     },
     {
       id: '4',
-      title: 'Portfolio Website',
-      description: 'Award-winning portfolio site with stunning animations and seamless user experience.',
-      image: '/projects/portfolio.jpg',
-      tags: ['Next.js', 'Tailwind', 'Framer Motion'],
-      liveUrl: 'https://example.com',
-      githubUrl: 'https://github.com',
-      featured: false,
+      title: 'Arctic Leaf Page Builder & Widgets',
+      description: 'Created a BigCommerce app featuring a drag-and-drop page builder with customizable widgets for e-commerce stores. Built using Next.js, React, and Vercel with KV Redis database for real-time data management and widget configurations.',
+      image: '/projects/widgetbuilder.png',
+      tags: ['Next.js', 'React', 'Tailwind', 'BigCommerce', 'Vercel', 'KV Redis'],
+      liveUrl: 'https://www.bigcommerce.com/apps/arctic-leaf-page-builder-widgets/',
+      category: 'web-app',
     },
   ];
 
-  const [filter, setFilter] = useState<'all' | 'featured'>('all');
+  const [filter, setFilter] = useState<'all' | 'e-commerce' | 'web-app'>('all');
 
-  const filteredProjects = filter === 'featured'
-    ? projects.filter(p => p.featured)
-    : projects;
+  const filteredProjects = filter === 'all'
+    ? projects
+    : projects.filter(p => p.category === filter);
 
   return (
     <section id="projects" className="py-24 md:py-32 bg-white">
@@ -72,7 +69,7 @@ export default function Projects() {
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 mx-auto rounded-full mb-6"></div>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            A selection of projects showcasing expertise in full-stack development and modern web technologies
+            From enterprise e-commerce platforms to custom BigCommerce apps - real projects delivered for real clients
           </p>
         </div>
 
@@ -89,14 +86,24 @@ export default function Projects() {
             All Projects
           </button>
           <button
-            onClick={() => setFilter('featured')}
+            onClick={() => setFilter('e-commerce')}
             className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
-              filter === 'featured'
+              filter === 'e-commerce'
                 ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg'
                 : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
             }`}
           >
-            Featured Only
+            E-Commerce
+          </button>
+          <button
+            onClick={() => setFilter('web-app')}
+            className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+              filter === 'web-app'
+                ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+          >
+            Web Apps
           </button>
         </div>
 
@@ -110,16 +117,14 @@ export default function Projects() {
                 animation: `fadeInUp 0.6s ease-out ${index * 0.1}s backwards`,
               }}
             >
-              {/* Project Image Placeholder */}
-              <div className="relative h-64 bg-gradient-to-br from-blue-500/20 to-indigo-600/20 overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-20">
-                  💻
-                </div>
-                {project.featured && (
-                  <div className="absolute top-4 right-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    Featured
-                  </div>
-                )}
+              {/* Project Image */}
+              <div className="relative h-64 bg-slate-100 overflow-hidden">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                />
                 {/* Overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center pb-6 gap-4">
                   {project.liveUrl && (
@@ -129,17 +134,7 @@ export default function Projects() {
                       rel="noopener noreferrer"
                       className="px-6 py-2 bg-white text-slate-900 rounded-full font-medium hover:bg-blue-500 hover:text-white transition-colors duration-300"
                     >
-                      Live Demo
-                    </a>
-                  )}
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-6 py-2 border-2 border-white text-white rounded-full font-medium hover:bg-white hover:text-slate-900 transition-colors duration-300"
-                    >
-                      View Code
+                      View Site
                     </a>
                   )}
                 </div>
