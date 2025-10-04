@@ -9,8 +9,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Cosmic Code Lab | Full-Stack Web Development",
-  description: "Cosmic Code Lab - Building cutting-edge web applications and e-commerce solutions. Founded by experienced developer Peter Arevalo.",
+  title: "Cosmic Code | Full-Stack Web Development",
+  description: "Cosmic Code - Building cutting-edge web applications and e-commerce solutions. Founded by experienced developer Peter Arevalo.",
 };
 
 export default function RootLayout({

@@ -51,6 +51,33 @@ export default function Projects() {
       liveUrl: 'https://www.bigcommerce.com/apps/arctic-leaf-page-builder-widgets/',
       category: 'web-app',
     },
+    {
+      id: '5',
+      title: 'Seek Outside',
+      description: 'Built a complete e-commerce site on BigCommerce Stencil theme using JavaScript and Foundation. Implemented custom CSS animations and interactive shopping features for outdoor gear and equipment.',
+      image: '/projects/seekoutside.png',
+      tags: ['JavaScript', 'BigCommerce', 'Foundation', 'CSS Animations'],
+      liveUrl: 'https://seekoutside.com',
+      category: 'e-commerce',
+    },
+    {
+      id: '6',
+      title: 'Shannon Calderon Writes',
+      description: 'Created a WordPress portfolio website for a professional writer using HTML and Bootstrap. Custom theme development with responsive design and content management features.',
+      image: '/projects/shannoncalderonwrites.png',
+      tags: ['WordPress', 'HTML', 'Bootstrap', 'PHP'],
+      liveUrl: 'https://shannoncalderonwrites.com/',
+      category: 'web-app',
+    },
+    {
+      id: '7',
+      title: 'InstaSmile Result App',
+      description: 'Built a full-stack application with Next.js API routes serving the frontend and a BigCommerce draft app dashboard for backend data management. Integrated Neon DB for database operations with Big Design UI components.',
+      image: '/projects/instasmile.png',
+      tags: ['Next.js', 'API Routes', 'Vercel', 'Neon DB', 'BigCommerce', 'Big Design'],
+      liveUrl: 'https://us.instasmile.com/pages/result/',
+      category: 'web-app',
+    },
   ];
 
   const [filter, setFilter] = useState<'all' | 'e-commerce' | 'web-app'>('all');

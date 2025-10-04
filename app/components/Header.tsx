@@ -38,7 +38,7 @@ export default function Header() {
   const navLinks = [
     { href: '#mission', label: 'Mission' },
     { href: '#services', label: 'Services' },
-    { href: '#reviews-awards', label: 'Reviews & Awards' },
+    // { href: '#reviews-awards', label: 'Reviews & Awards' },
     { href: '#projects', label: 'Projects' },
     { href: '#contact', label: 'Contact' },
   ];
@@ -111,7 +111,7 @@ export default function Header() {
               <h1 className={`text-xl font-bold transition-colors duration-300 ${
                 isInAboutSection ? 'text-slate-900' : 'text-white'
               }`}>
-                Cosmic Code Lab
+                Cosmic Code
               </h1>
             </a>
 

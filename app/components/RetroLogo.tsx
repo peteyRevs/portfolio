@@ -177,7 +177,7 @@ export default function RetroLogo() {
 
       {/* Company name below */}
       <p className="text-xl md:text-4xl text-blue-100 font-bold tracking-[0.15em] uppercase text-center">
-        Cosmic Code Lab
+        Cosmic Code
       </p>
     </div>
   );
