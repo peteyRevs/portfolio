@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 
 function useCountUp(end: number, duration: number = 2000) {
   const [count, setCount] = useState(0);
@@ -50,7 +51,7 @@ function useCountUp(end: number, duration: number = 2000) {
   return { count, ref };
 }
 
-export default function About() {
+export default function Mission() {
   const years = useCountUp(10);
   const savings = useCountUp(50);
   const quality = useCountUp(100);
@@ -58,7 +59,13 @@ export default function About() {
     <section id="mission" className="bg-white py-24 md:py-32">
       <div className="max-w-6xl mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
             Mission
           </h2>
@@ -66,10 +73,16 @@ export default function About() {
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
             Delivering enterprise-quality solutions at half the cost
           </p>
-        </div>
+        </motion.div>
 
         {/* Main Content */}
-        <div className="max-w-4xl mx-auto space-y-8 mb-16">
+        <motion.div
+          className="max-w-4xl mx-auto space-y-8 mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 md:p-12 border border-blue-100">
             <p className="text-lg text-slate-700 leading-relaxed mb-6">
               With over <span className="font-semibold text-blue-600">10 years of experience</span> working
@@ -82,7 +95,13 @@ export default function About() {
             </p>
 
             <div className="space-y-4">
-              <div className="flex gap-4">
+              <motion.div
+                className="flex gap-4"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
                   1
                 </div>
@@ -93,9 +112,15 @@ export default function About() {
                     no inflated costs.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex gap-4">
+              <motion.div
+                className="flex gap-4"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
                   2
                 </div>
@@ -106,9 +131,15 @@ export default function About() {
                     deployment, ensuring seamless execution.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex gap-4">
+              <motion.div
+                className="flex gap-4"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
                   3
                 </div>
@@ -119,44 +150,71 @@ export default function About() {
                     delivering faster without compromising quality.
                   </p>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Stats */}
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <div ref={years.ref} className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-white border border-blue-100">
+          <motion.div
+            ref={years.ref}
+            className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-white border border-blue-100"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
             <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600 mb-2">
               {years.count}+
             </div>
             <div className="text-slate-600 font-medium">
               Years Experience
             </div>
-          </div>
-          <div ref={savings.ref} className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-white border border-blue-100">
+          </motion.div>
+          <motion.div
+            ref={savings.ref}
+            className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-white border border-blue-100"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+          >
             <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600 mb-2">
               {savings.count}%
             </div>
             <div className="text-slate-600 font-medium">
               Cost Savings
             </div>
-          </div>
-          <div ref={quality.ref} className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-white border border-blue-100">
+          </motion.div>
+          <motion.div
+            ref={quality.ref}
+            className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-white border border-blue-100"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
             <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600 mb-2">
               {quality.count}%
             </div>
             <div className="text-slate-600 font-medium">
               Enterprise Quality
             </div>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="text-center mt-12">
+        <motion.div
+          className="text-center mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.9 }}
+        >
           <a href="#contact" className="btn-primary">
             Launch Your Project
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

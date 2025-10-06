@@ -2,21 +2,19 @@
 
 import { useEffect, useRef } from 'react';
 
-interface Particle {
+interface Star {
   x: number;
   y: number;
-  vx: number;
-  vy: number;
-  size: number;
-  opacity: number;
-  originalX: number;
-  originalY: number;
+  z: number;
+  prevX?: number;
+  prevY?: number;
 }
 
 export default function SpaceParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const particlesRef = useRef<Particle[]>([]);
+  const starsRef = useRef<Star[]>([]);
+  const speedRef = useRef(0.5);
+  const mouseRef = useRef({ x: 0, y: 0, active: false });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -25,137 +23,131 @@ export default function SpaceParticles() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    let centerX = 0;
+    let centerY = 0;
+
     const resizeCanvas = () => {
-      const oldWidth = canvas.width;
-      const oldHeight = canvas.height;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      centerX = canvas.width / 2;
+      centerY = canvas.height / 2;
 
-      // Update particle original positions proportionally when resizing
-      if (oldWidth > 0 && oldHeight > 0) {
-        const scaleX = canvas.width / oldWidth;
-        const scaleY = canvas.height / oldHeight;
+      // Reinitialize stars on resize
+      initStars();
+    };
 
-        particlesRef.current.forEach((particle) => {
-          particle.originalX *= scaleX;
-          particle.originalY *= scaleY;
-          particle.x *= scaleX;
-          particle.y *= scaleY;
-        });
-      }
+    const initStars = () => {
+      const starCount = 1000;
+      starsRef.current = Array.from({ length: starCount }, () => ({
+        x: Math.random() * canvas.width - centerX,
+        y: Math.random() * canvas.height - centerY,
+        z: Math.random() * canvas.width,
+      }));
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = {
+        x: e.clientX,
+        y: e.clientY,
+        active: true,
+      };
+    };
+
+    const handleMouseLeave = () => {
+      mouseRef.current.active = false;
     };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-
-    // Initialize particles
-    const particleCount = 300;
-    particlesRef.current = Array.from({ length: particleCount }, () => {
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height;
-      return {
-        x,
-        y,
-        originalX: x,
-        originalY: y,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 3 + 1,
-        opacity: Math.random() * 0.6 + 0.4,
-      };
-    });
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-
     window.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Fade effect for trails
+      ctx.fillStyle = 'rgba(10, 10, 20, 0.3)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      particlesRef.current.forEach((particle) => {
-        // Mouse interaction
-        const dx = mouseRef.current.x - particle.x;
-        const dy = mouseRef.current.y - particle.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 150;
+      starsRef.current.forEach((star) => {
+        // Store previous position for trails
+        star.prevX = star.x / star.z * canvas.width + centerX;
+        star.prevY = star.y / star.z * canvas.height + centerY;
 
-        if (distance < maxDistance) {
-          const force = (maxDistance - distance) / maxDistance;
-          const angle = Math.atan2(dy, dx);
-          particle.vx -= Math.cos(angle) * force * 0.05;
-          particle.vy -= Math.sin(angle) * force * 0.05;
-        }
+        // Move star forward (decrease z)
+        star.z -= speedRef.current;
 
-        // Pull back to original position
-        const dxOriginal = particle.originalX - particle.x;
-        const dyOriginal = particle.originalY - particle.y;
-        particle.vx += dxOriginal * 0.01;
-        particle.vy += dyOriginal * 0.01;
+        // Apply space-time bending effect near mouse
+        if (mouseRef.current.active) {
+          const sx = (star.x / star.z) * canvas.width + centerX;
+          const sy = (star.y / star.z) * canvas.height + centerY;
 
-        // Apply friction
-        particle.vx *= 0.92;
-        particle.vy *= 0.92;
-
-        // Velocity cap to prevent runaway particles
-        const maxVelocity = 5;
-        const velocityMagnitude = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy);
-        if (velocityMagnitude > maxVelocity) {
-          particle.vx = (particle.vx / velocityMagnitude) * maxVelocity;
-          particle.vy = (particle.vy / velocityMagnitude) * maxVelocity;
-        }
-
-        // Update position
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-
-        // Wrap around edges
-        if (particle.x < 0) particle.x = canvas.width;
-        if (particle.x > canvas.width) particle.x = 0;
-        if (particle.y < 0) particle.y = canvas.height;
-        if (particle.y > canvas.height) particle.y = 0;
-
-        // Draw particle with glow
-        ctx.beginPath();
-        const gradient = ctx.createRadialGradient(
-          particle.x,
-          particle.y,
-          0,
-          particle.x,
-          particle.y,
-          particle.size * 3
-        );
-        gradient.addColorStop(0, `rgba(147, 197, 253, ${particle.opacity})`);
-        gradient.addColorStop(0.5, `rgba(96, 165, 250, ${particle.opacity * 0.5})`);
-        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
-        ctx.fillStyle = gradient;
-        ctx.arc(particle.x, particle.y, particle.size * 3, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Draw core
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      // Draw connections
-      particlesRef.current.forEach((particle, i) => {
-        particlesRef.current.slice(i + 1).forEach((otherParticle) => {
-          const dx = particle.x - otherParticle.x;
-          const dy = particle.y - otherParticle.y;
+          const dx = mouseRef.current.x - sx;
+          const dy = mouseRef.current.y - sy;
           const distance = Math.sqrt(dx * dx + dy * dy);
+          const maxDistance = 200;
 
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(147, 197, 253, ${0.1 * (1 - distance / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.stroke();
+          if (distance < maxDistance) {
+            // Bend space-time - warp stars around the mouse
+            const force = (1 - distance / maxDistance) * 0.3;
+            const angle = Math.atan2(dy, dx);
+
+            // Bend stars away from mouse creating a gravity well effect
+            star.x -= Math.cos(angle) * force * star.z * 0.01;
+            star.y -= Math.sin(angle) * force * star.z * 0.01;
+
+            // Slow down stars near mouse (time dilation effect)
+            speedRef.current = 0.5 * (1 - force * 0.5);
+          } else {
+            speedRef.current = 0.5;
           }
-        });
+        } else {
+          speedRef.current = 0.5;
+        }
+
+        // Reset star when it goes past the screen
+        if (star.z <= 0) {
+          star.z = canvas.width;
+          star.x = Math.random() * canvas.width - centerX;
+          star.y = Math.random() * canvas.height - centerY;
+          star.prevX = undefined;
+          star.prevY = undefined;
+        }
+
+        // Calculate screen position
+        const sx = (star.x / star.z) * canvas.width + centerX;
+        const sy = (star.y / star.z) * canvas.height + centerY;
+
+        // Calculate star size based on depth
+        const size = (1 - star.z / canvas.width) * 3;
+
+        // Calculate opacity based on depth
+        const opacity = (1 - star.z / canvas.width) * 0.8 + 0.2;
+
+        // Draw trail if we have a previous position
+        if (star.prevX !== undefined && star.prevY !== undefined) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(147, 197, 253, ${opacity * 0.5})`;
+          ctx.lineWidth = size * 0.5;
+          ctx.moveTo(star.prevX, star.prevY);
+          ctx.lineTo(sx, sy);
+          ctx.stroke();
+        }
+
+        // Draw star
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.arc(sx, sy, size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Add glow for closer stars
+        if (star.z < canvas.width * 0.3) {
+          ctx.beginPath();
+          const gradient = ctx.createRadialGradient(sx, sy, 0, sx, sy, size * 3);
+          gradient.addColorStop(0, `rgba(147, 197, 253, ${opacity * 0.3})`);
+          gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+          ctx.fillStyle = gradient;
+          ctx.arc(sx, sy, size * 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
       });
 
       requestAnimationFrame(animate);
@@ -165,7 +157,6 @@ export default function SpaceParticles() {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
@@ -173,7 +164,7 @@ export default function SpaceParticles() {
     <canvas
       ref={canvasRef}
       className="fixed top-0 left-0 w-full h-full -z-10"
-      style={{ background: 'radial-gradient(ellipse at bottom, #1e293b 0%, #0a0a14 100%)' }}
+      style={{ background: 'radial-gradient(ellipse at center, #1e293b 0%, #0a0a14 100%)' }}
     />
   );
 }

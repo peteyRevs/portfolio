@@ -1,6 +1,7 @@
 'use client';
 
 import { Star, Trophy, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface Award {
   id: string;
@@ -75,15 +76,27 @@ export default function Awards() {
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Client Reviews & Awards
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 mx-auto rounded-full"></div>
-        </div>
+        </motion.div>
 
         {/* Testimonials */}
-        <div className="mb-16">
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((testimonial) => (
               <div
@@ -112,10 +125,16 @@ export default function Awards() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Awards */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <motion.div
+          className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           {awards.map((award) => {
             const IconComponent = award.icon;
             return (
@@ -149,7 +168,7 @@ export default function Awards() {
               </div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
 
       <style jsx>{`

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import RocketLogo from './RocketLogo';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -63,50 +64,11 @@ export default function Header() {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="flex items-center gap-3"
+              className={`flex items-center gap-3 transition-opacity duration-300 ${
+                isInAboutSection ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
             >
-              {/* Small Rocket Icon */}
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 200 200"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="transition-colors duration-300"
-              >
-                {/* Rocket Body */}
-                <path
-                  d="M 100 20 L 120 60 L 120 140 L 100 160 L 80 140 L 80 60 Z"
-                  fill={isInAboutSection ? '#3B82F6' : '#60A5FA'}
-                  className="transition-colors duration-300"
-                />
-                {/* Rocket Nose */}
-                <path
-                  d="M 100 20 L 120 60 L 80 60 Z"
-                  fill={isInAboutSection ? '#2563EB' : '#3B82F6'}
-                  className="transition-colors duration-300"
-                />
-                {/* Left Fin */}
-                <path
-                  d="M 80 100 L 60 120 L 60 160 L 80 140 Z"
-                  fill={isInAboutSection ? '#60A5FA' : '#93C5FD'}
-                  className="transition-colors duration-300"
-                />
-                {/* Right Fin */}
-                <path
-                  d="M 120 100 L 140 120 L 140 160 L 120 140 Z"
-                  fill={isInAboutSection ? '#60A5FA' : '#93C5FD'}
-                  className="transition-colors duration-300"
-                />
-                {/* Window */}
-                <circle
-                  cx="100"
-                  cy="85"
-                  r="10"
-                  fill={isInAboutSection ? '#1E40AF' : '#2563EB'}
-                  className="transition-colors duration-300"
-                />
-              </svg>
+              <RocketLogo width={32} height={35} />
 
               <h1 className={`text-xl font-bold transition-colors duration-300 ${
                 isInAboutSection ? 'text-slate-900' : 'text-white'

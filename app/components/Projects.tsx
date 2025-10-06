@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 interface Project {
   id: string;
@@ -90,7 +91,13 @@ export default function Projects() {
     <section id="projects" className="py-24 md:py-32 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
             Featured Projects
           </h2>
@@ -98,10 +105,16 @@ export default function Projects() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             From enterprise e-commerce platforms to custom BigCommerce apps - real projects delivered for real clients
           </p>
-        </div>
+        </motion.div>
 
         {/* Filter Buttons */}
-        <div className="flex justify-center gap-4 mb-12">
+        <motion.div
+          className="flex justify-center gap-4 mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <button
             onClick={() => setFilter('all')}
             className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
@@ -132,17 +145,20 @@ export default function Projects() {
           >
             Web Apps
           </button>
-        </div>
+        </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {filteredProjects.map((project, index) => (
+        <motion.div
+          className="grid md:grid-cols-2 gap-8"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          {filteredProjects.map((project) => (
             <div
               key={project.id}
               className="group relative bg-slate-50 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100"
-              style={{
-                animation: `fadeInUp 0.6s ease-out ${index * 0.1}s backwards`,
-              }}
             >
               {/* Project Image */}
               <div className="relative h-64 bg-slate-100 overflow-hidden">
@@ -193,21 +209,8 @@ export default function Projects() {
               <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-blue-500 transition-colors duration-500 pointer-events-none"></div>
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </section>
   );
 }

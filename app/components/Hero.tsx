@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import SpaceParticles from './SpaceParticles';
-import RetroLogo from './RetroLogo';
+import RocketLogo from './RocketLogo';
 
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -24,8 +24,13 @@ export default function Hero() {
               transform: isLoaded ? 'translateY(0)' : 'translateY(100vh)',
               opacity: isLoaded ? 1 : 0,
             }}
-          >
-            <RetroLogo />
+          >\
+            <div className="flex justify-center">
+              <RocketLogo />
+            </div>
+            <p className="text-xl md:text-4xl text-blue-100 font-bold tracking-[0.15em] uppercase text-center">
+              Cosmic Code
+            </p>
           </div>
 
           {/* Tagline fades in after rocket */}
