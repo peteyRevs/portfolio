@@ -1,5 +1,7 @@
 'use client';
 
+import { useId } from 'react';
+
 interface RocketLogoProps {
   width?: number;
   height?: number;
@@ -8,7 +10,7 @@ interface RocketLogoProps {
 
 export default function RocketLogo({ width = 140, height = 154, className = '' }: RocketLogoProps) {
   // Generate unique ID for gradients to avoid conflicts when multiple instances exist
-  const uniqueId = Math.random().toString(36).substring(7);
+  const uniqueId = useId();
 
   return (
     <svg
