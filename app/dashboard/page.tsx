@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   // Fetch all data in parallel with Promise.all
   const [
     { data: user },
-    { data: projects, error: projectsError },
+    { data: projects },
     { data: invoices },
     { data: messages },
     { data: documents },
@@ -44,10 +44,6 @@ export default async function DashboardPage() {
       .order('created_at', { ascending: false }),
   ]);
 
-  // Debug logging
-  console.log('Auth user ID:', authUser.id);
-  console.log('Projects:', projects);
-  console.log('Projects error:', projectsError);
 
   return (
     <DashboardTabs

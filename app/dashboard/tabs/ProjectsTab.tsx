@@ -1,11 +1,12 @@
 import { Project } from '@/types/database';
-import { Check } from 'lucide-react';
+import { Check, ExternalLink, AlertCircle } from 'lucide-react';
 
 interface ProjectsTabProps {
   projects: Project[];
 }
 
 export default function ProjectsTab({ projects }: ProjectsTabProps) {
+  console.log(projects[0].checklist)
   return (
     <div>
       <div className="mb-8">
@@ -83,6 +84,44 @@ export default function ProjectsTab({ projects }: ProjectsTabProps) {
                   {new Date(project.created_at).toLocaleDateString()}
                 </div>
               </div>
+
+              {/* Next Action */}
+              {project.next_action && (
+                <div className={`mb-4 p-4 rounded-lg border ${
+                  project.status === 'blocked'
+                    ? 'bg-red-500/10 border-red-500/30'
+                    : 'bg-blue-500/10 border-blue-500/30'
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className={`w-5 h-5 mt-0.5 ${
+                      project.status === 'blocked' ? 'text-red-400' : 'text-blue-400'
+                    }`} />
+                    <div>
+                      <h4 className={`text-sm font-semibold mb-1 ${
+                        project.status === 'blocked' ? 'text-red-400' : 'text-blue-400'
+                      }`}>
+                        Next Action
+                      </h4>
+                      <p className="text-sm text-slate-300">{project.next_action}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Preview Link */}
+              {project.preview_url && (
+                <div className="mb-4">
+                  <a
+                    href={project.preview_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg transition-colors text-sm font-medium"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    View Preview
+                  </a>
+                </div>
+              )}
 
               {/* Checklist */}
               {project.checklist && project.checklist.length > 0 && (

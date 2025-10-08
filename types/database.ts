@@ -39,8 +39,18 @@ export interface Project {
   end_date: string | null;
   progress_percentage: number;
   checklist: ChecklistItem[];
+  preview_url: string | null;
+  next_action: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface InvoiceLineItem {
+  id: string;
+  description: string;
+  quantity: number;
+  rate: number;
+  amount: number;
 }
 
 export interface Invoice {
@@ -48,10 +58,16 @@ export interface Invoice {
   client_id: string;
   project_id: string | null;
   invoice_number: string;
-  amount: number;
-  status: InvoiceStatus;
+  invoice_date: string;
   due_date: string;
+  line_items: InvoiceLineItem[];
+  subtotal: number;
+  tax_rate: number;
+  tax_amount: number;
+  total_amount: number;
+  status: InvoiceStatus;
   paid_date: string | null;
+  payment_method: string | null;
   invoice_url: string | null;
   notes: string | null;
   created_at: string;

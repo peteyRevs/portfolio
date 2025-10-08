@@ -33,18 +33,18 @@ export default function DashboardTabs({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 flex">
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} user={user} />
       <div className="flex-1 flex flex-col">
-        <DashboardHeader />
+        <DashboardHeader user={user} />
         <main className="flex-1 p-8">
           <div className="max-w-7xl">
             {/* Tab Content */}
             <div className="animate-in fade-in duration-300">
               {activeTab === 'projects' && <ProjectsTab projects={projects} />}
               {activeTab === 'invoices' && <InvoicesTab invoices={invoices} />}
-              {activeTab === 'messages' && <MessagesTab messages={messages} />}
-              {activeTab === 'documents' && <DocumentsTab documents={documents} />}
-              {activeTab === 'support' && <SupportTab tickets={tickets} />}
+              {activeTab === 'messages' && <MessagesTab messages={messages} projects={projects} currentUserId={user?.id || ''} />}
+              {activeTab === 'documents' && <DocumentsTab documents={documents} projects={projects} />}
+              {activeTab === 'support' && <SupportTab tickets={tickets} projects={projects} clientId={user?.id || ''} />}
             </div>
           </div>
         </main>

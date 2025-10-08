@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { FolderKanban, FileText, MessageSquare, FileStack, AlertCircle } from 'lucide-react';
 import RocketLogo from '../components/RocketLogo';
 import { TabType } from './DashboardTabs';
+import { User } from '@/types/database';
 
 const navigation = [
   { name: 'Projects', tab: 'projects' as TabType, icon: FolderKanban },
@@ -16,17 +16,18 @@ const navigation = [
 interface SidebarProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
+  user: User | null;
 }
 
-export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
+export default function Sidebar({ activeTab, onTabChange, user }: SidebarProps) {
   return (
     <aside className="w-64 bg-white/5 backdrop-blur-xl border-r border-white/10 min-h-screen sticky top-0">
       <div className="p-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-8">
           <RocketLogo width={32} height={35} />
           <span className="text-xl font-bold text-white">Cosmic Code</span>
-        </Link>
+        </div>
 
         {/* Navigation */}
         <nav className="space-y-2">
