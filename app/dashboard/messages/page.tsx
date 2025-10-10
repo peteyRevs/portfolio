@@ -6,23 +6,50 @@ import { Message, Project } from '@/types/database';
 import { createClient } from '@/lib/supabase/client';
 import { MessageSquare, Send, Paperclip, User } from 'lucide-react';
 
-interface MessagesTabProps {
-  messages: Message[];
-  projects: Project[];
-  currentUserId: string;
-}
-
-export default function MessagesTab({ messages: initialMessages, projects, currentUserId }: MessagesTabProps) {
+export default function MessagesPage() {
   const router = useRouter();
   const supabase = createClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const [selectedProject, setSelectedProject] = useState<string | null>(
-    projects[0]?.id || null
-  );
+  const [currentUserId, setCurrentUserId] = useState<string>('');
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [sending, setSending] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      setCurrentUserId(user.id);
+
+      const [projectsResponse, messagesResponse] = await Promise.all([
+        supabase
+          .from('projects')
+          .select('*')
+          .eq('client_id', user.id)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('messages')
+          .select('*')
+          .order('created_at', { ascending: false })
+      ]);
+
+      setProjects(projectsResponse.data || []);
+      setMessages(messagesResponse.data || []);
+
+      if (projectsResponse.data && projectsResponse.data.length > 0) {
+        setSelectedProject(projectsResponse.data[0].id);
+      }
+
+      setLoading(false);
+    }
+
+    fetchData();
+  }, []);
 
   // Filter messages by selected project
   const projectMessages = messages
@@ -82,7 +109,7 @@ export default function MessagesTab({ messages: initialMessages, projects, curre
 
   // Mark messages as read when viewing a project
   useEffect(() => {
-    if (!selectedProject) return;
+    if (!selectedProject || !currentUserId) return;
 
     const markAsRead = async () => {
       await supabase
@@ -113,7 +140,7 @@ export default function MessagesTab({ messages: initialMessages, projects, curre
       if (error) throw error;
 
       setNewMessage('');
-      router.refresh(); // Refresh to update server component data
+      router.refresh();
     } catch (error) {
       console.error('Error sending message:', error);
       alert('Failed to send message. Please try again.');
@@ -121,6 +148,14 @@ export default function MessagesTab({ messages: initialMessages, projects, curre
       setSending(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-slate-400">Loading messages...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-[calc(100vh-12rem)] flex flex-col">

@@ -1,18 +1,47 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
 import { SupportTicket, Project, TicketPriority } from '@/types/database';
 import { AlertCircle, Plus, Clock, CheckCircle } from 'lucide-react';
 import CreateTicketModal from '../components/CreateTicketModal';
 
-interface SupportTabProps {
-  tickets: SupportTicket[];
-  projects: Project[];
-  clientId: string;
-}
-
-export default function SupportTab({ tickets, projects, clientId }: SupportTabProps) {
+export default function SupportPage() {
+  const [tickets, setTickets] = useState<SupportTicket[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [clientId, setClientId] = useState<string>('');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      setClientId(user.id);
+
+      const [ticketsResponse, projectsResponse] = await Promise.all([
+        supabase
+          .from('support_tickets')
+          .select('*')
+          .eq('client_id', user.id)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('projects')
+          .select('*')
+          .eq('client_id', user.id)
+          .order('created_at', { ascending: false })
+      ]);
+
+      setTickets(ticketsResponse.data || []);
+      setProjects(projectsResponse.data || []);
+      setLoading(false);
+    }
+
+    fetchData();
+  }, []);
 
   // Group tickets by status
   const openTickets = tickets.filter(t => t.status === 'open' || t.status === 'in_progress');
@@ -36,6 +65,14 @@ export default function SupportTab({ tickets, projects, clientId }: SupportTabPr
       default: return 'bg-slate-500/20 text-slate-400';
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-slate-400">Loading support tickets...</div>
+      </div>
+    );
+  }
 
   return (
     <div>

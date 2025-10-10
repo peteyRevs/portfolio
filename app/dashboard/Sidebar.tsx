@@ -1,56 +1,68 @@
 'use client';
 
-import { FolderKanban, FileText, MessageSquare, FileStack, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { FolderKanban, FileText, MessageSquare, FileStack, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import RocketLogo from '../components/RocketLogo';
-import { TabType } from './DashboardTabs';
-import { User } from '@/types/database';
 
 const navigation = [
-  { name: 'Projects', tab: 'projects' as TabType, icon: FolderKanban },
-  { name: 'Invoices', tab: 'invoices' as TabType, icon: FileText },
-  { name: 'Messages', tab: 'messages' as TabType, icon: MessageSquare },
-  { name: 'Documents', tab: 'documents' as TabType, icon: FileStack },
-  { name: 'Support', tab: 'support' as TabType, icon: AlertCircle },
+  { name: 'Projects', href: '/dashboard/projects', icon: FolderKanban },
+  { name: 'Invoices', href: '/dashboard/invoices', icon: FileText },
+  { name: 'Messages', href: '/dashboard/messages', icon: MessageSquare },
+  { name: 'Documents', href: '/dashboard/documents', icon: FileStack },
+  { name: 'Support', href: '/dashboard/support', icon: AlertCircle },
 ];
 
-interface SidebarProps {
-  activeTab: TabType;
-  onTabChange: (tab: TabType) => void;
-  user: User | null;
-}
+export default function Sidebar() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const pathname = usePathname();
 
-export default function Sidebar({ activeTab, onTabChange, user }: SidebarProps) {
   return (
-    <aside className="w-64 bg-white/5 backdrop-blur-xl border-r border-white/10 min-h-screen sticky top-0">
+    <aside className={`${isCollapsed ? 'w-20' : 'w-64'} bg-white/5 backdrop-blur-xl border-r border-white/10 min-h-screen sticky top-0 transition-all duration-300`}>
       <div className="p-6">
         {/* Logo */}
-        <div className="flex items-center gap-3 mb-8">
+        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} mb-8`}>
           <RocketLogo width={32} height={35} />
-          <span className="text-xl font-bold text-white">Cosmic Code</span>
+          {!isCollapsed && <span className="text-xl font-bold text-white whitespace-nowrap">Cosmic Code</span>}
         </div>
 
         {/* Navigation */}
         <nav className="space-y-2">
           {navigation.map((item) => {
-            const isActive = activeTab === item.tab;
+            const isActive = pathname === item.href;
             const Icon = item.icon;
 
             return (
-              <button
+              <Link
                 key={item.name}
-                onClick={() => onTabChange(item.tab)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                href={item.href}
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} px-4 py-3 rounded-lg transition-all ${
                   isActive
                     ? 'bg-blue-500/20 text-blue-400 font-medium'
                     : 'text-slate-300 hover:bg-white/5 hover:text-white'
                 }`}
+                title={isCollapsed ? item.name : undefined}
               >
-                <Icon className="w-5 h-5" />
-                {item.name}
-              </button>
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                {!isCollapsed && <span>{item.name}</span>}
+              </Link>
             );
           })}
         </nav>
+
+        {/* Toggle Button */}
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className={`mt-8 w-full flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} px-4 py-3 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-all`}
+          title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          {isCollapsed ? (
+            <ChevronRight className="w-5 h-5 flex-shrink-0" />
+          ) : (
+            <ChevronLeft className="w-5 h-5 flex-shrink-0" />
+          )}
+        </button>
       </div>
     </aside>
   );

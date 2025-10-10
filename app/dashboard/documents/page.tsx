@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { Document, DocumentCategory, Project } from '@/types/database';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { Document, Project } from '@/types/database';
 import UploadDocumentModal from '../components/UploadDocumentModal';
 import {
   File,
@@ -13,15 +14,39 @@ import {
   Upload
 } from 'lucide-react';
 
-interface DocumentsTabProps {
-  documents: Document[];
-  projects: Project[];
-}
-
-
-export default function DocumentsTab({ documents, projects }: DocumentsTabProps) {
+export default function DocumentsPage() {
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      const [docsResponse, projectsResponse] = await Promise.all([
+        supabase
+          .from('documents')
+          .select('*')
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('projects')
+          .select('*')
+          .eq('client_id', user.id)
+          .order('created_at', { ascending: false })
+      ]);
+
+      setDocuments(docsResponse.data || []);
+      setProjects(projectsResponse.data || []);
+      setLoading(false);
+    }
+
+    fetchData();
+  }, []);
 
   // Filter documents
   const filteredDocuments = documents.filter((doc) => {
@@ -37,6 +62,13 @@ export default function DocumentsTab({ documents, projects }: DocumentsTabProps)
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-slate-400">Loading documents...</div>
+      </div>
+    );
+  }
 
   return (
     <div>

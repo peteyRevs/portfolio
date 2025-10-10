@@ -1,12 +1,21 @@
+import { createClient } from '@/lib/supabase/server';
 import { Project } from '@/types/database';
 import { Check, ExternalLink, AlertCircle } from 'lucide-react';
 
-interface ProjectsTabProps {
-  projects: Project[];
-}
+export default async function ProjectsPage() {
+  const supabase = await createClient();
+  const {
+    data: { user: authUser },
+  } = await supabase.auth.getUser();
 
-export default function ProjectsTab({ projects }: ProjectsTabProps) {
-  console.log(projects[0].checklist)
+  if (!authUser) return null;
+
+  const { data: projects } = await supabase
+    .from('projects')
+    .select('*')
+    .eq('client_id', authUser.id)
+    .order('created_at', { ascending: false });
+
   return (
     <div>
       <div className="mb-8">
@@ -16,7 +25,7 @@ export default function ProjectsTab({ projects }: ProjectsTabProps) {
 
       {projects && projects.length > 0 ? (
         <div className="grid gap-6">
-          {projects.map((project) => (
+          {projects.map((project: Project) => (
             <div
               key={project.id}
               className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-xl hover:bg-white/15 transition-all"

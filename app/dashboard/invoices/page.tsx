@@ -1,15 +1,34 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
 import { Invoice } from '@/types/database';
 import { Download, Eye, X, Calendar, CreditCard } from 'lucide-react';
 
-interface InvoicesTabProps {
-  invoices: Invoice[];
-}
-
-export default function InvoicesTab({ invoices }: InvoicesTabProps) {
+export default function InvoicesPage() {
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchInvoices() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      const { data } = await supabase
+        .from('invoices')
+        .select('*')
+        .eq('client_id', user.id)
+        .order('created_at', { ascending: false });
+
+      setInvoices(data || []);
+      setLoading(false);
+    }
+
+    fetchInvoices();
+  }, []);
 
   // Calculate summary stats
   const totalOwed = invoices
@@ -19,6 +38,14 @@ export default function InvoicesTab({ invoices }: InvoicesTabProps) {
   const totalPaid = invoices
     .filter(inv => inv.status === 'paid')
     .reduce((sum, inv) => sum + inv.total_amount, 0);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-slate-400">Loading invoices...</div>
+      </div>
+    );
+  }
 
   return (
     <div>

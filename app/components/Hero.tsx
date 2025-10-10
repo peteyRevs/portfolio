@@ -24,7 +24,7 @@ export default function Hero() {
               transform: isLoaded ? 'translateY(0)' : 'translateY(100vh)',
               opacity: isLoaded ? 1 : 0,
             }}
-          >\
+          >
             <div className="flex justify-center">
               <RocketLogo />
             </div>
