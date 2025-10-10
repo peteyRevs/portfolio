@@ -19,13 +19,14 @@ function useCountUp(end: number, duration: number = 2000) {
       { threshold: 0.3 }
     );
 
-    if (ref.current) {
-      observerRef.current.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observerRef.current.observe(currentRef);
     }
 
     return () => {
-      if (observerRef.current && ref.current) {
-        observerRef.current.unobserve(ref.current);
+      if (observerRef.current && currentRef) {
+        observerRef.current.unobserve(currentRef);
       }
     };
   }, [isVisible]);
